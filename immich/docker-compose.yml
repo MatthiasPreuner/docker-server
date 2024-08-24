@@ -10,7 +10,7 @@ name: immich
 
 services:
   immich-server:
-    container_name: immich_server
+    container_name: immich-server
     image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
     # extends:
     #   file: hwaccel.transcoding.yml
@@ -29,27 +29,23 @@ services:
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.docker.network=traefik
-      - traefik.http.routers.immich.service=immich
-      - traefik.http.services.immich.loadbalancer.server.port=3001
       - traefik.http.routers.immich.rule=Host(`preuner.v6.rocks`) && PathPrefix(`/immich`)
-
       - traefik.http.routers.immich.entrypoints=websecure
       - traefik.http.routers.immich.tls=true
+      - traefik.http.services.immich.loadbalancer.server.port=3001
+      - traefik.http.routers.immich.service=immich
       - traefik.http.routers.immich.tls.certresolver=letsencrypt
-
       # not sure if this is needed:
       - traefik.http.routers.immich.tls.middlewares=immich-stripprefix
       - traefik.http.middlewares.immich-stripprefix.stripprefix.prefixes=/immich
       - traefik.http.middlewares.immich-stripprefix.stripprefix.forceSlash=false
+      - traefik.docker.network=traefik
     networks:
       - traefik
       - immich
-    healthcheck:
-      disable: false
 
   immich-machine-learning:
-    container_name: immich_machine_learning
+    container_name: immich-machine_learning
     # For hardware acceleration, add one of -[armnn, cuda, openvino] to the image tag.
     # Example tag: ${IMMICH_VERSION:-release}-cuda
     image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
@@ -63,11 +59,9 @@ services:
     restart: unless-stopped
     networks:
       - immich
-    healthcheck:
-      disable: false
 
   redis:
-    container_name: immich_redis
+    container_name: immich-redis
     image: docker.io/redis:6.2-alpine@sha256:e3b17ba9479deec4b7d1eeec1548a253acc5374d68d3b27937fcfe4df8d18c7e
     healthcheck:
       test: redis-cli ping || exit 1
@@ -76,7 +70,7 @@ services:
       - immich
 
   database:
-    container_name: immich_postgres
+    container_name: immich-postgres
     image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
