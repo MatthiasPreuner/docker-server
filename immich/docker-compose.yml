@@ -38,6 +38,7 @@ services:
       - traefik.http.routers.immich.tls=true
       - traefik.http.routers.immich.tls.certresolver=letsencrypt
 
+      # not sure if this is needed:
       - traefik.http.routers.immich.tls.middlewares=immich-stripprefix
       - traefik.http.middlewares.immich-stripprefix.stripprefix.prefixes=/immich
       - traefik.http.middlewares.immich-stripprefix.stripprefix.forceSlash=false
