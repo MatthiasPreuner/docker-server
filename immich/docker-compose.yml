@@ -90,3 +90,8 @@ services:
 
 volumes:
   model-cache:
+
+networks:
+  traefik:
+    name: traefik
+    external: true
