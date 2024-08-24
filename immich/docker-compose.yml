@@ -43,6 +43,7 @@ services:
       - traefik.http.middlewares.immich-stripprefix.stripprefix.forceSlash=false
     networks:
       - traefik
+      - immich
     healthcheck:
       disable: false
 
@@ -59,6 +60,8 @@ services:
     env_file:
       - ../stack.env
     restart: unless-stopped
+    networks:
+      - immich
     healthcheck:
       disable: false
 
@@ -68,6 +71,8 @@ services:
     healthcheck:
       test: redis-cli ping || exit 1
     restart: unless-stopped
+    networks:
+      - immich
 
   database:
     container_name: immich_postgres
@@ -87,6 +92,14 @@ services:
       start_period: 5m
     command: ["postgres", "-c", "shared_preload_libraries=vectors.so", "-c", 'search_path="$$user", public, vectors', "-c", "logging_collector=on", "-c", "max_wal_size=2GB", "-c", "shared_buffers=512MB", "-c", "wal_compression=on"]
     restart: unless-stopped
+    networks:
+      - immich
 
 volumes:
   model-cache:
+
+networks:
+  traefik:
+    name: traefik
+    external: true
+  immich:
