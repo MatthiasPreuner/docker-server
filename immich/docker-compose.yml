@@ -21,7 +21,7 @@ services:
       - /media/samba/docker/immich/external:/home/user/matthias:ro
       - /etc/localtime:/etc/localtime:ro
     env_file:
-      - ../stack.env
+      - stack.env
     ports:
       - 2283:3001
     depends_on:
@@ -52,7 +52,7 @@ services:
     volumes:
       - model-cache:/cache
     env_file:
-      - ../stack.env
+      - stack.env
     restart: unless-stopped
     networks:
       - immich
