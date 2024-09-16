@@ -20,8 +20,8 @@ services:
       - ${UPLOAD_LOCATION}:/usr/src/app/upload
       - /media/samba/docker/immich/external:/home/user/matthias:ro
       - /etc/localtime:/etc/localtime:ro
-    env_file:
-      - ../stack.env
+    #env_file:
+    #  - ../stack.env
     ports:
       - 2283:3001
     depends_on:
@@ -51,8 +51,8 @@ services:
     #   service: cpu # set to one of [armnn, cuda, openvino, openvino-wsl] for accelerated inference - use the `-wsl` version for WSL2 where applicable
     volumes:
       - model-cache:/cache
-    env_file:
-      - ../stack.env
+    #env_file:
+    #  - ../stack.env
     restart: unless-stopped
     networks:
       - immich
